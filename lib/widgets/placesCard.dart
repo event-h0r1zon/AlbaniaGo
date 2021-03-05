@@ -59,7 +59,7 @@ class _PlacesCardState extends State<PlacesCard> {
                         ),
                       ),
                       Text(
-                        '${widget.placesInfo[index].season}',
+                        '${widget.placesInfo[index].region}',
                         style: TextStyle(
                           color: Colors.white,
                         ),

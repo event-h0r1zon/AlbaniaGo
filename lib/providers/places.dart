@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,8 +7,9 @@ class Place with ChangeNotifier {
   final String id;
   final String placeName;
   final String description;
-  final String season;
+  final Map<String, dynamic> season;
   final String imageURL;
+  final String region;
   bool isFavorite;
 
   Place({
@@ -19,6 +18,7 @@ class Place with ChangeNotifier {
     @required this.description,
     @required this.season,
     @required this.imageURL,
+    @required this.region,
     this.isFavorite = false,
   });
 
@@ -46,7 +46,8 @@ class Places with ChangeNotifier {
           id: element['ref']['@ref']['id'],
           placeName: element['data']['name'],
           description: element['data']['description'],
-          season: element['data']['season'],
+          season: element['data']['seasons'],
+          region: element['data']['region'],
           imageURL: element['data']['imageURL'],
         ));
       });
@@ -61,6 +62,12 @@ class Places with ChangeNotifier {
 
   List<Place> favoritePlaces() {
     return _places.where((place) => place.isFavorite).toList();
+  }
+
+  List<Place> suggestedPlaces(String season, String region) {
+    return _places
+        .where((place) => (place.season[season] && place.region == region))
+        .toList();
   }
 
   Future<void> read() async {

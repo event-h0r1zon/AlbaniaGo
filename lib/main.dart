@@ -1,8 +1,11 @@
+import 'package:AlbaniaGo/providers/suggestion.dart';
+import 'screens/suggested.dart';
 import './screens/favorites.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:AlbaniaGo/providers/places.dart';
 import './screens/home.dart';
+import './screens/suggestions.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,19 +16,24 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => Places(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => SuggestionsCategories(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'AlbaniaGo',
         theme: ThemeData(
           primaryColor: Color(0xFF3EBACE),
-          accentColor: Color(0xFFD8ECF1),
+          accentColor: Colors.cyan,
           scaffoldBackgroundColor: Color(0xFFF3F5F7),
         ),
         home: HomeScreen(),
         routes: {
           FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
+          SuggestionsScreen.routeName: (ctx) => SuggestionsScreen(),
+          SuggestedScreen.routeName: (ctx) => SuggestedScreen(),
         },
       ),
     );

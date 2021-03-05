@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/favorites.dart';
+import '../screens/suggestions.dart';
 
 class NavigationBarWidget extends StatefulWidget {
   final int _currentTab;
@@ -21,6 +22,9 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
                 Navigator.of(context).pushReplacementNamed('/');
               break;
             case 1:
+              if (widget._currentTab != value)
+                Navigator.of(context)
+                    .pushReplacementNamed(SuggestionsScreen.routeName);
               break;
             case 2:
               if (widget._currentTab != value)
