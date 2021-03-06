@@ -35,7 +35,7 @@ class Places with ChangeNotifier {
   }
 
   Future<void> fetchPlaces() async {
-    var url = 'http://10.0.2.2:3000/places';
+    const url = 'http://10.0.2.2:3000/places';
     try {
       final response = await http.get(url);
       final data = json.decode(response.body);

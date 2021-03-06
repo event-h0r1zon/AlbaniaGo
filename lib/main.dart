@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:AlbaniaGo/providers/places.dart';
 import './screens/home.dart';
 import './screens/suggestions.dart';
+import './providers/sights.dart';
+import './screens/sights_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,6 +22,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => SuggestionsCategories(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => PlaceSights(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -34,6 +39,7 @@ class MyApp extends StatelessWidget {
           FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
           SuggestionsScreen.routeName: (ctx) => SuggestionsScreen(),
           SuggestedScreen.routeName: (ctx) => SuggestedScreen(),
+          SightsScreen.routeName: (ctx) => SightsScreen(),
         },
       ),
     );
