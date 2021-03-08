@@ -79,22 +79,10 @@ class _SuggestionTilesState extends State<SuggestionTiles> {
             .suggestionsCategories[widget.name]
             .suggestions;
     return Container(
-      height: 40,
-      width: 180,
       margin: EdgeInsets.all(5),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
-        child: ListTile(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          title: Text(
-            suggestions[widget.index].text,
-            style: TextStyle(color: Colors.cyan),
-          ),
-          tileColor: suggestions[widget.index].active
-              ? Color(0xFFebfeff)
-              : Colors.white,
+        child: GestureDetector(
           onTap: () {
             setState(() {
               switch (widget.name) {
@@ -112,8 +100,31 @@ class _SuggestionTilesState extends State<SuggestionTiles> {
               suggestions[widget.index].toggleActivation();
             });
           },
-          leading: ImageIcon(
-            suggestions[widget.index].icon,
+          child: Card(
+            shadowColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                ImageIcon(
+                  suggestions[widget.index].icon,
+                  color: Colors.grey,
+                ),
+                Text(
+                  suggestions[widget.index].text,
+                  style: TextStyle(
+                    color: Colors.cyan,
+                    fontSize: 15,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ],
+            ),
+            color: suggestions[widget.index].active
+                ? Color(0xFFebfeff)
+                : Colors.white,
           ),
         ),
       ),

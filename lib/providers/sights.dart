@@ -22,7 +22,7 @@ class PlaceSights with ChangeNotifier {
   }
 
   Future<void> fetchSights(String placeID) async {
-    var url = 'http://10.0.2.2:3000/places/$placeID/sights';
+    var url = 'http://192.168.1.5:3000/places/$placeID/sights';
     try {
       final response = await http.get(url);
       final data = json.decode(response.body);

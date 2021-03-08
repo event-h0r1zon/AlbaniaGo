@@ -64,7 +64,7 @@ class _SuggestionsScreenState extends State<SuggestionsScreen> {
             ),
             Container(
               margin: EdgeInsets.all(10),
-              height: 150,
+              height: 160,
               child: GridView.count(
                 childAspectRatio: 2 / 0.7,
                 crossAxisCount: 2,
@@ -86,7 +86,7 @@ class _SuggestionsScreenState extends State<SuggestionsScreen> {
             ),
             Container(
               margin: EdgeInsets.all(10),
-              height: 150,
+              height: 160,
               child: GridView.count(
                 childAspectRatio: 2 / 0.7,
                 crossAxisCount: 2,

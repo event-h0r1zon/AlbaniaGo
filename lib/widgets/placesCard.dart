@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../providers/places.dart';
-import '../models/sightsargs.dart';
 import '../screens/sights_screen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PlacesCard extends StatefulWidget {
   final Places places;
@@ -22,16 +22,16 @@ class _PlacesCardState extends State<PlacesCard> {
         return InkWell(
           child: Container(
             margin: EdgeInsets.all(10),
-            width: 210,
+            width: MediaQuery.of(context).size.width / 2,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.0),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black26,
-                    offset: Offset(0, 2),
-                    blurRadius: 6,
+                    offset: Offset(0.0, 2.0),
+                    blurRadius: 6.0,
                   ),
                 ],
               ),
@@ -41,7 +41,7 @@ class _PlacesCardState extends State<PlacesCard> {
                     borderRadius: BorderRadius.circular(20),
                     child: Image(
                       height: 180,
-                      width: 180,
+                      width: MediaQuery.of(context).size.width / 2.2,
                       image: NetworkImage(widget.placesInfo[index].imageURL),
                       fit: BoxFit.cover,
                     ),
@@ -61,11 +61,23 @@ class _PlacesCardState extends State<PlacesCard> {
                             letterSpacing: 1.2,
                           ),
                         ),
-                        Text(
-                          '${widget.placesInfo[index].region}',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+                        SizedBox(height: 2),
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              FontAwesomeIcons.locationArrow,
+                              size: 10,
+                              color: Colors.white70,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              '${widget.placesInfo[index].region}',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -98,13 +110,10 @@ class _PlacesCardState extends State<PlacesCard> {
             ),
           ),
           onTap: () {
-            Navigator.of(context).pushNamed(SightsScreen.routeName,
-                arguments: SightsArguments(
-                  widget.placesInfo[index].id,
-                  widget.placesInfo[index].imageURL,
-                  widget.placesInfo[index].placeName,
-                  widget.placesInfo[index].region,
-                ));
+            Navigator.of(context).pushNamed(
+              SightsScreen.routeName,
+              arguments: widget.placesInfo[index],
+            );
           },
         );
       },

@@ -1,8 +1,8 @@
+import 'package:AlbaniaGo/providers/places.dart';
 import 'package:flutter/material.dart';
 import '../providers/sights.dart';
 import 'package:provider/provider.dart';
 import '../widgets/navBar.dart';
-import '../models/sightsargs.dart';
 import '../widgets/sightsWidget.dart';
 
 class SightsScreen extends StatefulWidget {
@@ -15,7 +15,7 @@ class SightsScreen extends StatefulWidget {
 class _SightsScreenState extends State<SightsScreen> {
   bool _isInit = false;
   bool _isLoading = false;
-  SightsArguments arguments;
+  Place currentPlace;
 
   @override
   void initState() {
@@ -29,9 +29,9 @@ class _SightsScreenState extends State<SightsScreen> {
         _isLoading = true;
       });
     if (_isLoading) {
-      arguments = ModalRoute.of(context).settings.arguments;
+      currentPlace = ModalRoute.of(context).settings.arguments;
       return Provider.of<PlaceSights>(context, listen: false)
-          .fetchSights(arguments.id)
+          .fetchSights(currentPlace.id)
           .then(
             (value) => setState(() {
               _isLoading = false;
@@ -59,8 +59,8 @@ class _SightsScreenState extends State<SightsScreen> {
             )
           : RefreshIndicator(
               onRefresh: () => _reload(context, true),
-              child: SightsWidget(Provider.of<PlaceSights>(context).sights,
-                  arguments.imageURL, arguments.placeName, arguments.region),
+              child: SightsWidget(
+                  Provider.of<PlaceSights>(context).sights, currentPlace),
             ),
       bottomNavigationBar: NavigationBarWidget(0),
     );

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import '../providers/sights.dart';
+import '../providers/places.dart';
+import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SightsWidget extends StatefulWidget {
-  final String imageURL;
-  final String placeName;
-  final String region;
+  final Place currentPlace;
   final List<Sight> sights;
-  SightsWidget(this.sights, this.imageURL, this.placeName, this.region);
+  SightsWidget(this.sights, this.currentPlace);
   @override
   _SightsWidgetState createState() => _SightsWidgetState();
 }
@@ -19,9 +20,12 @@ class _SightsWidgetState extends State<SightsWidget> {
         Stack(
           children: <Widget>[
             Container(
-              height: MediaQuery.of(context).size.width / 1.2,
+              height: MediaQuery.of(context).size.width / 1.3,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black26,
@@ -31,9 +35,12 @@ class _SightsWidgetState extends State<SightsWidget> {
                 ],
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
                 child: Image.network(
-                  widget.imageURL,
+                  widget.currentPlace.imageURL,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -54,7 +61,7 @@ class _SightsWidgetState extends State<SightsWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '${widget.placeName}',
+                    '${widget.currentPlace.placeName}',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 25,
@@ -62,80 +69,170 @@ class _SightsWidgetState extends State<SightsWidget> {
                       letterSpacing: 1.2,
                     ),
                   ),
-                  Text(
-                    '${widget.region}',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.white,
-                    ),
+                  SizedBox(height: 3),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        FontAwesomeIcons.locationArrow,
+                        size: 13,
+                        color: Colors.white70,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        '${widget.currentPlace.region}',
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
+            Positioned(
+              right: 20,
+              bottom: 20,
+              child: IconButton(
+                icon: widget.currentPlace.isFavorite
+                    ? Icon(
+                        Icons.favorite,
+                        color: Colors.white,
+                        size: 32,
+                      )
+                    : Icon(
+                        Icons.favorite_border,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                onPressed: () {
+                  setState(() {
+                    widget.currentPlace.toggleFavorite();
+                    Provider.of<Places>(context, listen: false).save();
+                  });
+                },
+              ),
+            ),
           ],
+        ),
+        SizedBox(
+          height: 5,
         ),
         Expanded(
           child: ListView.builder(
             padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
             itemCount: widget.sights.length,
             itemBuilder: (BuildContext context, int index) {
-              return Stack(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(40.0, 5.0, 20.0, 5.0),
-                    height: 170.0,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(100.0, 20.0, 20.0, 20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            width: 220,
-                            child: Text(
-                              widget.sights[index].name,
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            widget.sights[index].description,
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
+              if (index > 0)
+                return SightListTile(widget.sights[index]);
+              else
+                return Column(
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                      child: Text(
+                        "About",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                          fontSize: 25,
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    left: 20.0,
-                    top: 15.0,
-                    bottom: 15.0,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image(
-                        width: 110.0,
-                        image: NetworkImage(widget.sights[index].imageURL),
-                        fit: BoxFit.cover,
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 15),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        widget.currentPlace.description,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              );
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                      child: Text(
+                        "Explore",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                          fontSize: 25,
+                        ),
+                      ),
+                    ),
+                    SightListTile(widget.sights[index]),
+                  ],
+                );
             },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SightListTile extends StatelessWidget {
+  final Sight sight;
+  SightListTile(this.sight);
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.fromLTRB(40.0, 5.0, 20.0, 5.0),
+          height: 170.0,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(100.0, 20.0, 20.0, 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 220,
+                  child: Text(
+                    sight.name,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  sight.description,
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          left: 20.0,
+          top: 15.0,
+          bottom: 15.0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: Image(
+              width: 110.0,
+              image: NetworkImage(sight.imageURL),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ],
